@@ -2,8 +2,8 @@ import os
 
 import typer
 
-from app.app import get_application
-from app.core.config import settings
+from src.clean_shopping_list.config import get_config
+from src.clean_shopping_list.presentation.web_api.app import get_application
 
 cli = typer.Typer()
 app = get_application()
@@ -11,8 +11,9 @@ app = get_application()
 
 @cli.command()
 def serve(workers: int = 1):
+    config = get_config()
     os.system(f'gunicorn manage:app --workers {workers} --worker-class uvicorn.workers.UvicornWorker '
-              f'--bind {settings.HOST}:{settings.PORT}')
+              f'--bind {config.HOST}:{config.PORT}')
 
 
 @cli.command()
