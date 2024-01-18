@@ -6,6 +6,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Config(BaseSettings):
+    JWT_SECRET: str
+    PASSWORD_SECRET: str
     PROJECT_NAME: str = 'ProjectName'
     HOST: str = '127.0.0.1'
     PORT: int = 8000

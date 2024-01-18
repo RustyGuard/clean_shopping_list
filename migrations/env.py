@@ -7,14 +7,16 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 
 from alembic import context
 import sys
+
+from src.clean_shopping_list.config import get_config
+
 sys.path = ['', '..'] + sys.path[1:]
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
-from app.core.config import settings
-
+app_config = get_config()
 config = context.config
 config.set_main_option('sqlalchemy.url',
-                       str(settings.DATABASE_URI).replace('%', '%%'))
+                       str(app_config.DATABASE_URI).replace('%', '%%'))
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -24,9 +26,8 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from app.models import *
-from app.database import BaseModel
-target_metadata = BaseModel.metadata
+from src.clean_shopping_list.infrastructure.models import metadata
+target_metadata = metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

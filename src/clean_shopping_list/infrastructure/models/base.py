@@ -1,22 +1,6 @@
 import re
-
-from sqlalchemy import MetaData
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.inspection import inspect
+from sqlalchemy import MetaData, inspect
 from sqlalchemy.orm import as_declarative, declared_attr
-
-from app.core.config import settings
-
-engine = create_async_engine(str(settings.DATABASE_URI), echo=False, pool_pre_ping=True)
-async_session = async_sessionmaker(
-    engine, expire_on_commit=False, autocommit=False, autoflush=False
-)
-
-
-async def get_session() -> AsyncSession:
-    async with async_session() as session:
-        yield session
-
 
 POSTGRES_INDEXES_NAMING_CONVENTION = {
     "ix": "%(column_0_label)s_idx",
@@ -29,7 +13,7 @@ metadata = MetaData(naming_convention=POSTGRES_INDEXES_NAMING_CONVENTION)
 
 
 @as_declarative(metadata=metadata)
-class BaseModel:
+class BaseSqlAlchemyModel:
 
     @declared_attr
     def __tablename__(cls) -> str:
